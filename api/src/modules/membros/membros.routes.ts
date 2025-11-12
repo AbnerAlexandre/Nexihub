@@ -1,7 +1,7 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 import { MembrosController } from './membros.controller'
-import { insertMembroSchema, selectMembroSchema } from '@/db/schema'
+import { insertMembroSchema, selectMembroSchema, selectMembroEssencialSchema } from '@/db/schema'
 
 export const membrosRoutes: FastifyPluginAsyncZod = async (app) => {
   const controller = new MembrosController()
@@ -11,9 +11,9 @@ export const membrosRoutes: FastifyPluginAsyncZod = async (app) => {
     {
       schema: {
         tags: ['Membros'],
-        description: 'Lista todos os membros',
+        description: 'Lista todos os membros (dados essenciais)',
         response: {
-          200: z.array(selectMembroSchema),
+          200: z.array(selectMembroEssencialSchema),
         },
       },
     },

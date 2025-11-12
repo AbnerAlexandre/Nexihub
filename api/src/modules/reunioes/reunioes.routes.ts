@@ -1,7 +1,7 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 import { ReunioesController } from './reunioes.controller'
-import { insertReuniaoSchema, selectReuniaoSchema } from '@/db/schema'
+import { insertReuniaoSchema, selectReuniaoSchema, selectReuniaoEssencialSchema } from '@/db/schema'
 
 export const reunioesRoutes: FastifyPluginAsyncZod = async (app) => {
   const controller = new ReunioesController()
@@ -11,9 +11,9 @@ export const reunioesRoutes: FastifyPluginAsyncZod = async (app) => {
     {
       schema: {
         tags: ['Reuniões'],
-        description: 'Lista todas as reuniões',
+        description: 'Lista todas as reuniões (dados essenciais)',
         response: {
-          200: z.array(selectReuniaoSchema),
+          200: z.array(selectReuniaoEssencialSchema),
         },
       },
     },

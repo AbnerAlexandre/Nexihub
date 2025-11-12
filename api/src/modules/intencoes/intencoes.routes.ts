@@ -1,7 +1,7 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 import { IntencoesController } from './intencoes.controller'
-import { insertIntencaoParticipacaoSchema, selectIntencaoParticipacaoSchema } from '@/db/schema'
+import { insertIntencaoParticipacaoSchema, selectIntencaoParticipacaoSchema, selectIntencaoEssencialSchema } from '@/db/schema'
 
 export const intencoesRoutes: FastifyPluginAsyncZod = async (app) => {
   const controller = new IntencoesController()
@@ -11,9 +11,9 @@ export const intencoesRoutes: FastifyPluginAsyncZod = async (app) => {
     {
       schema: {
         tags: ['Intenções'],
-        description: 'Lista todas as intenções de participação',
+        description: 'Lista todas as intenções de participação (dados essenciais)',
         response: {
-          200: z.array(selectIntencaoParticipacaoSchema),
+          200: z.array(selectIntencaoEssencialSchema),
         },
       },
     },

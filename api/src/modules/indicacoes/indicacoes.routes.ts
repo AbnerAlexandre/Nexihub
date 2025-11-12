@@ -1,7 +1,7 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 import { IndicacoesController } from './indicacoes.controller'
-import { insertIndicacaoSchema, selectIndicacaoSchema } from '@/db/schema'
+import { insertIndicacaoSchema, selectIndicacaoSchema, selectIndicacaoEssencialSchema } from '@/db/schema'
 
 export const indicacoesRoutes: FastifyPluginAsyncZod = async (app) => {
   const controller = new IndicacoesController()
@@ -11,9 +11,9 @@ export const indicacoesRoutes: FastifyPluginAsyncZod = async (app) => {
     {
       schema: {
         tags: ['Indicações'],
-        description: 'Lista todas as indicações',
+        description: 'Lista todas as indicações (dados essenciais)',
         response: {
-          200: z.array(selectIndicacaoSchema),
+          200: z.array(selectIndicacaoEssencialSchema),
         },
       },
     },

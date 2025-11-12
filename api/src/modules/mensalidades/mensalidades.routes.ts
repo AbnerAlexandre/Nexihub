@@ -1,7 +1,7 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 import { MensalidadesController } from './mensalidades.controller'
-import { insertMensalidadeSchema, selectMensalidadeSchema } from '@/db/schema'
+import { insertMensalidadeSchema, selectMensalidadeSchema, selectMensalidadeEssencialSchema } from '@/db/schema'
 
 export const mensalidadesRoutes: FastifyPluginAsyncZod = async (app) => {
   const controller = new MensalidadesController()
@@ -11,9 +11,9 @@ export const mensalidadesRoutes: FastifyPluginAsyncZod = async (app) => {
     {
       schema: {
         tags: ['Mensalidades'],
-        description: 'Lista todas as mensalidades',
+        description: 'Lista todas as mensalidades (dados essenciais)',
         response: {
-          200: z.array(selectMensalidadeSchema),
+          200: z.array(selectMensalidadeEssencialSchema),
         },
       },
     },

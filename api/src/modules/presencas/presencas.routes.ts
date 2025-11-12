@@ -1,10 +1,24 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 import { PresencasController } from './presencas.controller'
-import { insertPresencaSchema, selectPresencaSchema } from '@/db/schema'
+import { insertPresencaSchema, selectPresencaSchema, selectPresencaEssencialSchema } from '@/db/schema'
 
 export const presencasRoutes: FastifyPluginAsyncZod = async (app) => {
   const controller = new PresencasController()
+
+  app.get(
+    '/',
+    {
+      schema: {
+        tags: ['Presenças'],
+        description: 'Lista todas as presenças (dados essenciais)',
+        response: {
+          200: z.array(selectPresencaEssencialSchema),
+        },
+      },
+    },
+    controller.getAll.bind(controller)
+  )
 
   app.get(
     '/:id',

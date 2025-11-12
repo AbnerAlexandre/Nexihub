@@ -1,7 +1,7 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 import { ObrigadosController } from './obrigados.controller'
-import { insertObrigadoSchema, selectObrigadoSchema } from '@/db/schema'
+import { insertObrigadoSchema, selectObrigadoSchema, selectObrigadoEssencialSchema } from '@/db/schema'
 
 export const obrigadosRoutes: FastifyPluginAsyncZod = async (app) => {
   const controller = new ObrigadosController()
@@ -11,9 +11,9 @@ export const obrigadosRoutes: FastifyPluginAsyncZod = async (app) => {
     {
       schema: {
         tags: ['Obrigados'],
-        description: 'Lista todos os agradecimentos',
+        description: 'Lista todos os agradecimentos (dados essenciais)',
         response: {
-          200: z.array(selectObrigadoSchema),
+          200: z.array(selectObrigadoEssencialSchema),
         },
       },
     },
