@@ -9,5 +9,16 @@ export const insertMensalidadeSchema = createInsertSchema(mensalidades, {
 
 export const selectMensalidadeSchema = createSelectSchema(mensalidades)
 
+// Schema essencial para listagens (findAll)
+export const selectMensalidadeEssencialSchema = selectMensalidadeSchema.pick({
+  id: true,
+  membroId: true,
+  valor: true,
+  mesReferencia: true,
+  pago: true,
+  dataPagamento: true,
+})
+
 export type Mensalidade = typeof mensalidades.$inferSelect
 export type InsertMensalidade = z.infer<typeof insertMensalidadeSchema>
+export type MensalidadeEssencial = z.infer<typeof selectMensalidadeEssencialSchema>

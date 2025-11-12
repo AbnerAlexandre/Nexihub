@@ -10,5 +10,16 @@ export const insertMembroSchema = createInsertSchema(membros, {
 
 export const selectMembroSchema = createSelectSchema(membros)
 
+// Schema essencial para listagens (findAll)
+export const selectMembroEssencialSchema = selectMembroSchema.pick({
+  id: true,
+  nome: true,
+  email: true,
+  tipo: true,
+  celular: true,
+  statusMembro: true,
+})
+
 export type Membro = typeof membros.$inferSelect
 export type InsertMembro = z.infer<typeof insertMembroSchema>
+export type MembroEssencial = z.infer<typeof selectMembroEssencialSchema>

@@ -9,5 +9,15 @@ export const insertIntencaoParticipacaoSchema = createInsertSchema(intencoesPart
 
 export const selectIntencaoParticipacaoSchema = createSelectSchema(intencoesParticipacao)
 
+// Schema essencial para listagens (findAll)
+export const selectIntencaoEssencialSchema = selectIntencaoParticipacaoSchema.pick({
+  id: true,
+  nome: true,
+  email: true,
+  status: true,
+  dataSolicitacao: true,
+})
+
 export type IntencaoParticipacao = typeof intencoesParticipacao.$inferSelect
 export type InsertIntencaoParticipacao = z.infer<typeof insertIntencaoParticipacaoSchema>
+export type IntencaoEssencial = z.infer<typeof selectIntencaoEssencialSchema>

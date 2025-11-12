@@ -8,5 +8,15 @@ export const insertObrigadoSchema = createInsertSchema(obrigados, {
 
 export const selectObrigadoSchema = createSelectSchema(obrigados)
 
+// Schema essencial para listagens (findAll)
+export const selectObrigadoEssencialSchema = selectObrigadoSchema.pick({
+  id: true,
+  idMembroAgradecido: true,
+  idMembroRecebeu: true,
+  mensagem: true,
+  dataCriacao: true,
+})
+
 export type Obrigado = typeof obrigados.$inferSelect
 export type InsertObrigado = z.infer<typeof insertObrigadoSchema>
+export type ObrigadoEssencial = z.infer<typeof selectObrigadoEssencialSchema>

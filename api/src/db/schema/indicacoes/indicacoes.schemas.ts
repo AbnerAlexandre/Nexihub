@@ -9,5 +9,18 @@ export const insertIndicacaoSchema = createInsertSchema(indicacoes, {
 
 export const selectIndicacaoSchema = createSelectSchema(indicacoes)
 
+// Schema essencial para listagens (findAll)
+export const selectIndicacaoEssencialSchema = selectIndicacaoSchema.pick({
+  id: true,
+  nomeCliente: true,
+  emailCliente: true,
+  status: true,
+  dataCriacao: true,
+}).extend({
+  nomeIndicador: z.string().nullable(),
+  nomeRecebeu: z.string().nullable(),
+})
+
 export type Indicacao = typeof indicacoes.$inferSelect
 export type InsertIndicacao = z.infer<typeof insertIndicacaoSchema>
+export type IndicacaoEssencial = z.infer<typeof selectIndicacaoEssencialSchema>
