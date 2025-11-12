@@ -9,6 +9,11 @@ export class PresencasController {
     this.service = new PresencasService()
   }
 
+  async getAll(request: FastifyRequest, reply: FastifyReply) {
+    const presencas = await this.service.getAll()
+    return reply.status(200).send(presencas)
+  }
+
   async getById(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     try {
       const presenca = await this.service.getById(request.params.id)
