@@ -8,6 +8,10 @@ export class PresencasService {
     this.repository = new PresencasRepository()
   }
 
+  async getAll() {
+    return await this.repository.findAll()
+  }
+
   async getById(id: string) {
     const presenca = await this.repository.findById(id)
     if (!presenca) {
