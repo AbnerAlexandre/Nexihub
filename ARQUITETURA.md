@@ -308,3 +308,26 @@ A api vai seguir modelo de API Rest com rotas definidas, métodos e schemas de d
 |`POST`|/intention|nome, email, celular|`201`|
 |`GET`|/users/id|id|`200` Dados do usuário que foi feito a pesquisa|
 |`PUT`|/intention|status|`201`|
+
+### 7 WEB
+
+A aplicação web vai ser no modelo de SPA (após a autenticação), para estillo será utilizado o tailwind e componentização com o shadcnui.
+
+Para a organização dos components eu planejei utiliza-los da seguinte maneira:
+```
+- components/ui: Components do shadcn
+
+- components/common: Components criados que podem ser reutilizados no sistema (logo, header, 
+navbar, link, etc)
+
+- features/(nome_do_conteudo)/hooks: Onde ficará os hooks
+
+- features/(nome_do_conteudo)/services: Onde ficará os services de cada uma das features
+
+- lib/: Onde ficará localizado funções e config utilitárias, exemplo da api exportando os
+métodos padrões.
+
+```
+Para controle de páginas, usarei o App router, separando por:
+- **(public)**: Pagina onde qualque um pode entrar
+- **(private)**: Pagina onde somente usuários autenticados podem entrar.
