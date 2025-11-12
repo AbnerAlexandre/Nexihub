@@ -1,5 +1,5 @@
 import { db } from '@/db'
-import { presencas, type InsertPresenca, type Presenca } from '@/db/schema'
+import { membros, presencas, type InsertPresenca, type Presenca } from '@/db/schema'
 import { eq, and, desc } from 'drizzle-orm'
 
 type PresencaEssencial = Pick<Presenca, 'id' | 'reuniaoId' | 'membroId' | 'fezCheckin' | 'horaCheckin'>
@@ -15,6 +15,7 @@ export class PresencasRepository {
         horaCheckin: presencas.horaCheckin,
       })
       .from(presencas)
+      .leftJoin(membros, eq(presencas.membroId, membros.id))
       .orderBy(desc(presencas.horaCheckin))
 
     return result

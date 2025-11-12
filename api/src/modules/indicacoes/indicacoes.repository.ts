@@ -1,10 +1,17 @@
 import { db } from '@/db'
 import { indicacoes, type InsertIndicacao, type Indicacao, membros } from '@/db/schema'
 import { eq, and, desc } from 'drizzle-orm'
+import { alias } from "drizzle-orm/pg-core";
 
-type IndicacaoEssencial = Pick<Indicacao, 'id' | 'nomeCliente' | 'emailCliente' | 'status' | 'dataCriacao'>
+type IndicacaoEssencial = Pick<Indicacao, 'id' | 'nomeCliente' | 'emailCliente' | 'status' | 'dataCriacao'> & {
+  nomeIndicador: string | null
+  nomeRecebeu: string | null
+}
 
+const membroIndicador = alias(membros, "membroIndicador");
+const membroRecebeu = alias(membros, "membroRecebeu");
 export class IndicacoesRepository {
+  
   async findAll(): Promise<IndicacaoEssencial[]> {
     const result = await db
       .select({
@@ -13,10 +20,12 @@ export class IndicacoesRepository {
         emailCliente: indicacoes.emailCliente,
         status: indicacoes.status,
         dataCriacao: indicacoes.dataCriacao,
+        nomeIndicador: membroIndicador.nome,
+        nomeRecebeu: membroRecebeu.nome,
       })
       .from(indicacoes)
-      .leftJoin(membros, eq(indicacoes.idMembroIndicador, membros.id))
-      .leftJoin(membros, eq(indicacoes.idMembroRecebeu, membros.id))
+      .leftJoin(membroIndicador, eq(indicacoes.idMembroIndicador, membroIndicador.id))
+      .leftJoin(membroRecebeu, eq(indicacoes.idMembroRecebeu, membroRecebeu.id))
       .orderBy(desc(indicacoes.dataCriacao))
 
     return result

@@ -1,21 +1,24 @@
 import { db } from '@/db'
-import { mensalidades, type InsertMensalidade, type Mensalidade } from '@/db/schema'
+import { membros, mensalidades, type InsertMensalidade, type Mensalidade } from '@/db/schema'
 import { eq, and, desc } from 'drizzle-orm'
 
-type MensalidadeEssencial = Pick<Mensalidade, 'id' | 'membroId' | 'valor' | 'mesReferencia' | 'pago' | 'dataPagamento'>
+type MensalidadeEssencial = Pick<Mensalidade, 'id' | 'valor' | 'mesReferencia' | 'pago' | 'dataPagamento'> & {
+  membroNome: string | null
+}
 
 export class MensalidadesRepository {
   async findAll(): Promise<MensalidadeEssencial[]> {
     const result = await db
       .select({
         id: mensalidades.id,
-        membroId: mensalidades.membroId,
         valor: mensalidades.valor,
         mesReferencia: mensalidades.mesReferencia,
         pago: mensalidades.pago,
         dataPagamento: mensalidades.dataPagamento,
+        membroNome: membros.nome,
       })
       .from(mensalidades)
+      .leftJoin(membros, eq(mensalidades.membroId, membros.id))
       .orderBy(desc(mensalidades.mesReferencia))
 
     return result
