@@ -20,6 +20,24 @@ export const membrosRoutes: FastifyPluginAsyncZod = async (app) => {
     controller.getAll.bind(controller)
   )
 
+  app.post(
+    '/authenticate',
+    {
+      schema: {
+        tags: ['Membros'],
+        description: 'Lista todos os membros (dados essenciais)',
+        body: z.object({
+          email: z.email(),
+          senha: z.string(),
+        }),
+        response: {
+          200: selectMembroEssencialSchema,
+        },
+      },
+    },
+    controller.getAutenticate.bind(controller)
+  )
+
   app.get(
     '/:id',
     {

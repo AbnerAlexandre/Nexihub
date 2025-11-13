@@ -14,6 +14,15 @@ export class MembrosController {
     return reply.status(200).send(membros)
   }
 
+  async getAutenticate(request: FastifyRequest<{ Body: { email: string; senha: string } }>, reply: FastifyReply) {
+    try {
+      const membros = await this.service.getAutenticate(request.body.email, request.body.senha)
+      return reply.status(200).send(membros)
+    } catch (error) {
+      return reply.status(401).send({ error: 'Credenciais inválidas' })
+    }
+  }
+
   async getById(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     try {
       const membro = await this.service.getById(request.params.id)

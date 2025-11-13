@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { membros, type InsertMembro, type Membro } from '@/db/schema'
-import { desc, eq } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 
 type MembroEssencial = Pick<Membro, 'id' | 'nome' | 'email' | 'tipo' | 'celular' | 'statusMembro'>
 
@@ -18,6 +18,23 @@ export class MembrosRepository {
       .from(membros)
       .orderBy(desc(membros.id))
 
+    return result
+  }
+
+  async authenticate(email: string, senha: string): Promise<MembroEssencial> {
+    const [result] = await db
+      .select({
+        id: membros.id,
+        nome: membros.nome,
+        email: membros.email,
+        tipo: membros.tipo,
+        celular: membros.celular,
+        statusMembro: membros.statusMembro,
+      })
+      .from(membros)
+      .where(and(eq(membros.email, email), eq(membros.senhaHash, senha)))
+      .orderBy(desc(membros.id))
+      .limit(1)
     return result
   }
 

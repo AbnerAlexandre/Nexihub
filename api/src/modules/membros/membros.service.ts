@@ -1,3 +1,4 @@
+import { uuidv7 } from 'uuidv7'
 import { MembrosRepository } from './membros.repository'
 import type { InsertMembro } from '@/db/schema'
 
@@ -10,6 +11,14 @@ export class MembrosService {
 
   async getAll() {
     return await this.repository.findAll()
+  }
+
+  async getAutenticate(email: string, senha: string) {
+    const membro = await this.repository.authenticate(email, senha)
+    if (!membro) {
+      throw new Error('Credenciais inválidas')
+    }
+    return membro
   }
 
   async getById(id: string) {
@@ -29,7 +38,11 @@ export class MembrosService {
   }
 
   async create(data: InsertMembro) {
-    return await this.repository.create(data)
+    const membroComId = {
+      ...data,
+      id: uuidv7(),
+    }
+    return await this.repository.create(membroComId)
   }
 
   async update(id: string, data: Partial<InsertMembro>) {
