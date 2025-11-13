@@ -1,0 +1,694 @@
+{
+  "id": "bd174334-0969-4f50-bb19-89e57c2743f7",
+  "prevId": "a35905b5-4eed-4b1e-ada5-f8df2e7660f1",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.membros": {
+      "name": "membros",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "tipo_membro",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'membro'"
+        },
+        "celular": {
+          "name": "celular",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "senha_hash": {
+          "name": "senha_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ramo": {
+          "name": "ramo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status_membro": {
+          "name": "status_membro",
+          "type": "status_membro",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pendente'"
+        },
+        "data_entrada": {
+          "name": "data_entrada",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "agradecimentos_publicos": {
+          "name": "agradecimentos_publicos",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "experiencias": {
+          "name": "experiencias",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "membros_email_unique": {
+          "name": "membros_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.intencoes_participacao": {
+      "name": "intencoes_participacao",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "celular": {
+          "name": "celular",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "status_intencao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pendente'"
+        },
+        "data_solicitacao": {
+          "name": "data_solicitacao",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "token_convite": {
+          "name": "token_convite",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "token_expira_em": {
+          "name": "token_expira_em",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "intencoes_participacao_token_convite_unique": {
+          "name": "intencoes_participacao_token_convite_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "token_convite"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.indicacoes": {
+      "name": "indicacoes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id_membro_indicador": {
+          "name": "id_membro_indicador",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_membro_recebeu": {
+          "name": "id_membro_recebeu",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome_cliente": {
+          "name": "nome_cliente",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email_cliente": {
+          "name": "email_cliente",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "telefone_cliente": {
+          "name": "telefone_cliente",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "motivo": {
+          "name": "motivo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "status_indicacao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pendente'"
+        },
+        "data_criacao": {
+          "name": "data_criacao",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "data_fechamento": {
+          "name": "data_fechamento",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "indicacoes_id_membro_indicador_membros_id_fk": {
+          "name": "indicacoes_id_membro_indicador_membros_id_fk",
+          "tableFrom": "indicacoes",
+          "tableTo": "membros",
+          "columnsFrom": [
+            "id_membro_indicador"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "indicacoes_id_membro_recebeu_membros_id_fk": {
+          "name": "indicacoes_id_membro_recebeu_membros_id_fk",
+          "tableFrom": "indicacoes",
+          "tableTo": "membros",
+          "columnsFrom": [
+            "id_membro_recebeu"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.obrigados": {
+      "name": "obrigados",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id_indicacao": {
+          "name": "id_indicacao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_membro_agradecido": {
+          "name": "id_membro_agradecido",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_membro_recebeu": {
+          "name": "id_membro_recebeu",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mensagem": {
+          "name": "mensagem",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data_criacao": {
+          "name": "data_criacao",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "obrigados_id_indicacao_indicacoes_id_fk": {
+          "name": "obrigados_id_indicacao_indicacoes_id_fk",
+          "tableFrom": "obrigados",
+          "tableTo": "indicacoes",
+          "columnsFrom": [
+            "id_indicacao"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "obrigados_id_membro_agradecido_membros_id_fk": {
+          "name": "obrigados_id_membro_agradecido_membros_id_fk",
+          "tableFrom": "obrigados",
+          "tableTo": "membros",
+          "columnsFrom": [
+            "id_membro_agradecido"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "obrigados_id_membro_recebeu_membros_id_fk": {
+          "name": "obrigados_id_membro_recebeu_membros_id_fk",
+          "tableFrom": "obrigados",
+          "tableTo": "membros",
+          "columnsFrom": [
+            "id_membro_recebeu"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.reunioes": {
+      "name": "reunioes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "titulo": {
+          "name": "titulo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data_hora": {
+          "name": "data_hora",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criada_por": {
+          "name": "criada_por",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "tipo_reuniao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'geral'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reunioes_criada_por_membros_id_fk": {
+          "name": "reunioes_criada_por_membros_id_fk",
+          "tableFrom": "reunioes",
+          "tableTo": "membros",
+          "columnsFrom": [
+            "criada_por"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.reunioes_membros": {
+      "name": "reunioes_membros",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "reuniao_id": {
+          "name": "reuniao_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "membro_id": {
+          "name": "membro_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reunioes_membros_reuniao_id_reunioes_id_fk": {
+          "name": "reunioes_membros_reuniao_id_reunioes_id_fk",
+          "tableFrom": "reunioes_membros",
+          "tableTo": "reunioes",
+          "columnsFrom": [
+            "reuniao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "reunioes_membros_membro_id_membros_id_fk": {
+          "name": "reunioes_membros_membro_id_membros_id_fk",
+          "tableFrom": "reunioes_membros",
+          "tableTo": "membros",
+          "columnsFrom": [
+            "membro_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.presencas": {
+      "name": "presencas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "reuniao_id": {
+          "name": "reuniao_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "membro_id": {
+          "name": "membro_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fez_checkin": {
+          "name": "fez_checkin",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "hora_checkin": {
+          "name": "hora_checkin",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "presencas_reuniao_id_reunioes_id_fk": {
+          "name": "presencas_reuniao_id_reunioes_id_fk",
+          "tableFrom": "presencas",
+          "tableTo": "reunioes",
+          "columnsFrom": [
+            "reuniao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "presencas_membro_id_membros_id_fk": {
+          "name": "presencas_membro_id_membros_id_fk",
+          "tableFrom": "presencas",
+          "tableTo": "membros",
+          "columnsFrom": [
+            "membro_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.mensalidades": {
+      "name": "mensalidades",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "membro_id": {
+          "name": "membro_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "valor": {
+          "name": "valor",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mes_referencia": {
+          "name": "mes_referencia",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data_pagamento": {
+          "name": "data_pagamento",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data_criacao": {
+          "name": "data_criacao",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "pago": {
+          "name": "pago",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "mensalidades_membro_id_membros_id_fk": {
+          "name": "mensalidades_membro_id_membros_id_fk",
+          "tableFrom": "mensalidades",
+          "tableTo": "membros",
+          "columnsFrom": [
+            "membro_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.status_indicacao": {
+      "name": "status_indicacao",
+      "schema": "public",
+      "values": [
+        "pendente",
+        "em_prospeccao",
+        "fechado",
+        "perdido"
+      ]
+    },
+    "public.status_intencao": {
+      "name": "status_intencao",
+      "schema": "public",
+      "values": [
+        "pendente",
+        "aprovado",
+        "recusado"
+      ]
+    },
+    "public.status_membro": {
+      "name": "status_membro",
+      "schema": "public",
+      "values": [
+        "ativo",
+        "pendente",
+        "recusado"
+      ]
+    },
+    "public.tipo_membro": {
+      "name": "tipo_membro",
+      "schema": "public",
+      "values": [
+        "admin",
+        "membro"
+      ]
+    },
+    "public.tipo_reuniao": {
+      "name": "tipo_reuniao",
+      "schema": "public",
+      "values": [
+        "geral",
+        "selecionada"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

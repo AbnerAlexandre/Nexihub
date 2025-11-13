@@ -9,6 +9,6 @@ export const intencoesParticipacao = pgTable('intencoes_participacao', {
   celular: text().notNull(),
   status: statusIntencaoEnum().notNull().default('pendente'),
   dataSolicitacao: timestamp('data_solicitacao').notNull().defaultNow(),
-  tokenConvite: text('token_convite').notNull().unique(),
-  tokenExpiraEm: timestamp('token_expira_em').notNull(),
+  tokenConvite: text('token_convite').unique(),
+  tokenExpiraEm: timestamp('token_expira_em'),
 })
