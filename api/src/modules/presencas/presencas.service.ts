@@ -1,3 +1,4 @@
+import { uuidv7 } from 'uuidv7'
 import { PresencasRepository } from './presencas.repository'
 import type { InsertPresenca } from '@/db/schema'
 
@@ -45,7 +46,11 @@ export class PresencasService {
   }
 
   async create(data: InsertPresenca) {
-    return await this.repository.create(data)
+    const presencaComId = {
+      ...data,
+      id: uuidv7(),
+    }
+    return await this.repository.create(presencaComId)
   }
 
   async update(id: string, data: Partial<InsertPresenca>) {

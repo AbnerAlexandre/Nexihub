@@ -1,3 +1,4 @@
+import { uuidv7 } from 'uuidv7'
 import { IndicacoesRepository } from './indicacoes.repository'
 import type { InsertIndicacao } from '@/db/schema'
 
@@ -41,7 +42,11 @@ export class IndicacoesService {
   }
 
   async create(data: InsertIndicacao) {
-    return await this.repository.create(data)
+    const indicacaoComId = {
+      ...data,
+      id: uuidv7(),
+    }
+    return await this.repository.create(indicacaoComId)
   }
 
   async update(id: string, data: Partial<InsertIndicacao>) {

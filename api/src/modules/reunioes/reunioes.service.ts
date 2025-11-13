@@ -1,3 +1,4 @@
+import { uuidv7 } from 'uuidv7'
 import { ReunioesRepository } from './reunioes.repository'
 import type { InsertReuniao } from '@/db/schema'
 
@@ -41,7 +42,11 @@ export class ReunioesService {
   }
 
   async create(data: InsertReuniao) {
-    return await this.repository.create(data)
+    const reuniaoComId = {
+      ...data,
+      id: uuidv7(),
+    }
+    return await this.repository.create(reuniaoComId)
   }
 
   async update(id: string, data: Partial<InsertReuniao>) {

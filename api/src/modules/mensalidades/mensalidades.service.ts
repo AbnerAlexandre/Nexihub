@@ -1,3 +1,4 @@
+import { uuidv7 } from 'uuidv7'
 import { MensalidadesRepository } from './mensalidades.repository'
 import type { InsertMensalidade } from '@/db/schema'
 
@@ -45,7 +46,11 @@ export class MensalidadesService {
   }
 
   async create(data: InsertMensalidade) {
-    return await this.repository.create(data)
+    const mensalidadeComId = {
+      ...data,
+      id: uuidv7(),
+    }
+    return await this.repository.create(mensalidadeComId)
   }
 
   async update(id: string, data: Partial<InsertMensalidade>) {
