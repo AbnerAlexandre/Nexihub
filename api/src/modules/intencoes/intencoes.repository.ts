@@ -45,7 +45,7 @@ export class IntencoesRepository {
   }
 
   async create(data: InsertIntencaoParticipacao): Promise<IntencaoParticipacao> {
-    const [intencao] = await db.insert(intencoesParticipacao).values(data).returning()
+    const [intencao] = await db.insert(intencoesParticipacao).values(data as any).returning()
     return intencao
   }
 

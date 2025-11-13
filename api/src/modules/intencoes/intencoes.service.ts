@@ -1,3 +1,5 @@
+import { uuidv7 } from 'uuidv7'
+import { randomBytes } from 'node:crypto'
 import { IntencoesRepository } from './intencoes.repository'
 import type { InsertIntencaoParticipacao } from '@/db/schema'
 
@@ -37,7 +39,30 @@ export class IntencoesService {
   }
 
   async create(data: InsertIntencaoParticipacao) {
-    return await this.repository.create(data)
+    const intencaoComId = {
+      ...data,
+      id: uuidv7(),
+      status: 'pendente' as const,
+      dataSolicitacao: new Date(),
+      tokenConvite: null,
+      tokenExpiraEm: null,
+    }
+    
+    return await this.repository.create(intencaoComId)
+  }
+
+  async aprovar(id: string) {
+    // Gerar token de convite único ao aprovar
+    const tokenConvite = randomBytes(32).toString('hex')
+    
+    // Token expira em 7 dias
+    const tokenExpiraEm = new Date()
+    tokenExpiraEm.setDate(tokenExpiraEm.getDate() + 7)
+
+    return await this.repository.update(id, {
+      tokenConvite,
+      tokenExpiraEm,
+    } as any)
   }
 
   async update(id: string, data: Partial<InsertIntencaoParticipacao>) {

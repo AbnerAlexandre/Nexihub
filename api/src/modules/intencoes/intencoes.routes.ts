@@ -96,7 +96,7 @@ export const intencoesRoutes: FastifyPluginAsyncZod = async (app) => {
         description: 'Cria uma nova intenção de participação',
         body: insertIntencaoParticipacaoSchema,
         response: {
-          201: selectIntencaoParticipacaoSchema,
+          201: z.void(),
         },
       },
     },
@@ -119,6 +119,23 @@ export const intencoesRoutes: FastifyPluginAsyncZod = async (app) => {
       },
     },
     controller.update.bind(controller)
+  )
+
+  app.post(
+    '/:id/aprovar',
+    {
+      schema: {
+        tags: ['Intenções'],
+        description: 'Aprova uma intenção e gera token de convite',
+        params: z.object({
+          id: z.string().uuid(),
+        }),
+        response: {
+          200: selectIntencaoParticipacaoSchema,
+        },
+      },
+    },
+    controller.aprovar.bind(controller)
   )
 }
 
