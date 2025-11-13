@@ -1,5 +1,5 @@
 import "./globals.css";
-
+import { QueryProvider } from "@/components/providers/query-provider";
 
 export default function RootLayout({
   children,
@@ -11,7 +11,9 @@ export default function RootLayout({
       <body
         className="w-screen min-h-screen"
       >
-        {children}
+        <QueryProvider>
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );
