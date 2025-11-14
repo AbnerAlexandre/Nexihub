@@ -4,16 +4,33 @@ import { Button } from "@/components/ui/button"
 import { useCreateIntencao } from "@/features"
 import Link from "next/link"
 import { useState } from "react"
+import { registerSchema, type RegisterFormData } from '@/lib/validations/register'
 
 export default function RegisterPage() {
-  const [nome, setNome] = useState('')
-  const [email, setEmail] = useState('')
-  const [celular, setCelular] = useState('')
+  const [formData, setFormData] = useState<RegisterFormData>({
+    nome: '',
+    email: '',
+    celular: '',
+  })
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const { mutate: handleCreateIntencao, isPending, error } = useCreateIntencao()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    handleCreateIntencao({ nome, email, celular })
+    
+    try {
+      registerSchema.parse(formData)
+      setErrors({})
+      handleCreateIntencao(formData)
+    } catch (error: any) {
+      const newErrors: Record<string, string> = {}
+      error.errors?.forEach((err: any) => {
+        if (err.path) {
+          newErrors[err.path[0]] = err.message
+        }
+      })
+      setErrors(newErrors)
+    }
   }
 
   return (
@@ -36,12 +53,19 @@ export default function RegisterPage() {
                 id="nome"
                 name="nome"
                 type="text"
-                required
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                className="w-full px-4 py-3 bg-background-secondary border border-white/10 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent transition-colors"
+                value={formData.nome}
+                onChange={(e) => {
+                  setFormData(prev => ({ ...prev, nome: e.target.value }))
+                  if (errors.nome) setErrors(prev => ({ ...prev, nome: '' }))
+                }}
+                className={`w-full px-4 py-3 bg-background-secondary border rounded-md focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent transition-colors ${
+                  errors.nome ? 'border-red-500' : 'border-white/10'
+                }`}
                 placeholder="seu nome"
               />
+              {errors.nome && (
+                <p className="text-red-500 text-sm mt-1">{errors.nome}</p>
+              )}
             </div>
 
             <div>
@@ -52,12 +76,19 @@ export default function RegisterPage() {
                 id="email"
                 name="email"
                 type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-background-secondary border border-white/10 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent transition-colors"
+                value={formData.email}
+                onChange={(e) => {
+                  setFormData(prev => ({ ...prev, email: e.target.value }))
+                  if (errors.email) setErrors(prev => ({ ...prev, email: '' }))
+                }}
+                className={`w-full px-4 py-3 bg-background-secondary border rounded-md focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent transition-colors ${
+                  errors.email ? 'border-red-500' : 'border-white/10'
+                }`}
                 placeholder="seu@email.com"
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
 
             <div>
@@ -68,12 +99,19 @@ export default function RegisterPage() {
                 id="celular"
                 name="celular"
                 type="text"
-                required
-                value={celular}
-                onChange={(e) => setCelular(e.target.value)}
-                className="w-full px-4 py-3 bg-background-secondary border border-white/10 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent transition-colors"
+                value={formData.celular}
+                onChange={(e) => {
+                  setFormData(prev => ({ ...prev, celular: e.target.value }))
+                  if (errors.celular) setErrors(prev => ({ ...prev, celular: '' }))
+                }}
+                className={`w-full px-4 py-3 bg-background-secondary border rounded-md focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent transition-colors ${
+                  errors.celular ? 'border-red-500' : 'border-white/10'
+                }`}
                 placeholder="(99) 99999-9999"
               />
+              {errors.celular && (
+                <p className="text-red-500 text-sm mt-1">{errors.celular}</p>
+              )}
             </div>
 
           </div>

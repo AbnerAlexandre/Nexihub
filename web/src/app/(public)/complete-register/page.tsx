@@ -6,6 +6,7 @@ import { useCreateMembro } from '@/features/membros/hooks/use-membros'
 import { PageTitle } from '@/components/common'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect } from 'react'
+import { completeRegisterSchema, type CompleteRegisterFormData } from '@/lib/validations/complete-register'
 
 export default function CompleteRegisterPage() {
   const searchParams = useSearchParams()
@@ -15,7 +16,7 @@ export default function CompleteRegisterPage() {
   const { data: intencao, isLoading, isError } = useIntencaoByToken(token || '')
   const createMembroMutation = useCreateMembro()
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CompleteRegisterFormData>({
     senha: '',
     confirmarSenha: '',
     ramo: '',
@@ -42,28 +43,20 @@ export default function CompleteRegisterPage() {
   }, [intencao, router])
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {}
-
-    if (!formData.senha.trim()) {
-      newErrors.senha = 'Senha é obrigatória'
-    } else if (formData.senha.length < 6) {
-      newErrors.senha = 'Senha deve ter no mínimo 6 caracteres'
+    try {
+      completeRegisterSchema.parse(formData)
+      setErrors({})
+      return true
+    } catch (error: any) {
+      const newErrors: Record<string, string> = {}
+      error.errors?.forEach((err: any) => {
+        if (err.path) {
+          newErrors[err.path[0]] = err.message
+        }
+      })
+      setErrors(newErrors)
+      return false
     }
-
-    if (formData.senha !== formData.confirmarSenha) {
-      newErrors.confirmarSenha = 'As senhas não coincidem'
-    }
-
-    if (!formData.ramo.trim()) {
-      newErrors.ramo = 'Ramo de atuação é obrigatório'
-    }
-
-    if (!formData.descricao.trim()) {
-      newErrors.descricao = 'Descrição é obrigatória'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -87,9 +80,9 @@ export default function CompleteRegisterPage() {
     }
   }
 
-  const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-    if (errors[field]) {
+  const handleChange = (field: keyof CompleteRegisterFormData, value: string) => {
+    setFormData((prev: CompleteRegisterFormData) => ({ ...prev, [field]: value }))
+    if (errors[field as string]) {
       setErrors((prev) => ({ ...prev, [field]: '' }))
     }
   }

@@ -4,16 +4,33 @@ import { Button } from "@/components/ui/button"
 import { useLogin } from "@/features"
 import Link from "next/link"
 import { useState } from "react"
+import { loginSchema, type LoginFormData } from '@/lib/validations/login'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: '',
+    senha: '',
+  })
+  const [errors, setErrors] = useState<Record<string, string>>({})
   
   const { mutate: handleLogin, isPending, error } = useLogin()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    handleLogin({ email, senha })
+    
+    try {
+      loginSchema.parse(formData)
+      setErrors({})
+      handleLogin(formData)
+    } catch (error: any) {
+      const newErrors: Record<string, string> = {}
+      error.errors?.forEach((err: any) => {
+        if (err.path) {
+          newErrors[err.path[0]] = err.message
+        }
+      })
+      setErrors(newErrors)
+    }
   }
 
   return (
@@ -36,12 +53,19 @@ export default function LoginPage() {
                 id="email"
                 name="email"
                 type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-background-secondary border border-white/10 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent transition-colors"
+                value={formData.email}
+                onChange={(e) => {
+                  setFormData(prev => ({ ...prev, email: e.target.value }))
+                  if (errors.email) setErrors(prev => ({ ...prev, email: '' }))
+                }}
+                className={`w-full px-4 py-3 bg-background-secondary border rounded-md focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent transition-colors ${
+                  errors.email ? 'border-red-500' : 'border-white/10'
+                }`}
                 placeholder="seu@email.com"
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
 
             <div>
@@ -52,12 +76,19 @@ export default function LoginPage() {
                 id="senha"
                 name="senha"
                 type="password"
-                required
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                className="w-full px-4 py-3 bg-background-secondary border border-white/10 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent transition-colors"
+                value={formData.senha}
+                onChange={(e) => {
+                  setFormData(prev => ({ ...prev, senha: e.target.value }))
+                  if (errors.senha) setErrors(prev => ({ ...prev, senha: '' }))
+                }}
+                className={`w-full px-4 py-3 bg-background-secondary border rounded-md focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent transition-colors ${
+                  errors.senha ? 'border-red-500' : 'border-white/10'
+                }`}
                 placeholder="••••••••"
               />
+              {errors.senha && (
+                <p className="text-red-500 text-sm mt-1">{errors.senha}</p>
+              )}
             </div>
           </div>
 

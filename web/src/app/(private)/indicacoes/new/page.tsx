@@ -6,6 +6,7 @@ import { useMembros } from '@/features/membros/hooks/use-membros'
 import { PageTitle } from '@/components/common'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect } from 'react'
+import { createIndicacaoSchema, type CreateIndicacaoFormData } from '@/lib/validations/indicacao'
 
 export default function NewIndicacaoPage() {
   const router = useRouter()
@@ -13,7 +14,7 @@ export default function NewIndicacaoPage() {
   const { data: membros, isLoading: membrosLoading } = useMembros()
 
   const [currentUserId, setCurrentUserId] = useState<string>('')
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CreateIndicacaoFormData>({
     idMembroRecebeu: '',
     nomeCliente: '',
     emailCliente: '',
@@ -35,27 +36,20 @@ export default function NewIndicacaoPage() {
   }, [])
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {}
-
-    if (!formData.idMembroRecebeu) {
-      newErrors.idMembroRecebeu = 'Selecione um membro'
+    try {
+      createIndicacaoSchema.parse(formData)
+      setErrors({})
+      return true
+    } catch (error: any) {
+      const newErrors: Record<string, string> = {}
+      error.errors?.forEach((err: any) => {
+        if (err.path) {
+          newErrors[err.path[0]] = err.message
+        }
+      })
+      setErrors(newErrors)
+      return false
     }
-    if (!formData.nomeCliente.trim()) {
-      newErrors.nomeCliente = 'Nome é obrigatório'
-    }
-    if (!formData.emailCliente.trim()) {
-      newErrors.emailCliente = 'Email é obrigatório'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailCliente)) {
-      newErrors.emailCliente = 'Email inválido'
-    }
-    if (!formData.telefoneCliente.trim()) {
-      newErrors.telefoneCliente = 'Telefone é obrigatório'
-    } else if (formData.telefoneCliente.replace(/\D/g, '').length < 10) {
-      newErrors.telefoneCliente = 'Telefone deve ter no mínimo 10 dígitos'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,9 +76,9 @@ export default function NewIndicacaoPage() {
     }
   }
 
-  const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-    if (errors[field]) {
+  const handleChange = (field: keyof CreateIndicacaoFormData, value: string) => {
+    setFormData((prev: CreateIndicacaoFormData) => ({ ...prev, [field]: value }))
+    if (errors[field as string]) {
       setErrors((prev) => ({ ...prev, [field]: '' }))
     }
   }
