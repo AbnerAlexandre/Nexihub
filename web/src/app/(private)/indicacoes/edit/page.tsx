@@ -78,7 +78,6 @@ export default function EditIndicacaoPage() {
         id: indicacao.id,
         data: {
           status,
-          dataFechamento: status === 'fechado' || status === 'perdido' ? new Date().toISOString() : undefined,
         },
       })
       router.push('/indicacoes')

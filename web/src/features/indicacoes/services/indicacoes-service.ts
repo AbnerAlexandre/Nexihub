@@ -35,8 +35,7 @@ export type IndicacaoCreate = {
 }
 
 export type IndicacaoUpdate = {
-  status?: IndicacaoStatus
-  dataFechamento?: string
+  status: IndicacaoStatus
 }
 
 export async function getIndicacoes(): Promise<IndicacaoEssencial[]> {
