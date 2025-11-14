@@ -27,10 +27,18 @@ export default function EditIntencaoPage() {
   const handleSave = async () => {
     if (!intencao) return
     try {
-      await updateMutation.mutateAsync({
+      const result = await updateMutation.mutateAsync({
         id: intencao.id,
         data: { status },
       })
+      
+      if (status === 'aprovado' && result.tokenConvite) {
+        const completeRegisterUrl = `${window.location.origin}/complete-register?token=${result.tokenConvite}`
+        alert(`Cadastro aprovado com sucesso! Foi enviado um e-mail para ${intencao.email} com o link:\n\n${completeRegisterUrl}`)
+      } else {
+        alert('Status atualizado com sucesso!')
+      }
+      
       router.push('/intencoes')
     } catch (error) {
       console.error('Erro ao atualizar intenção:', error)
@@ -40,11 +48,13 @@ export default function EditIntencaoPage() {
   const handleAprovar = async () => {
     if (!intencao) return
     try {
-      await aprovarMutation.mutateAsync(intencao.id)
-      alert('Intenção aprovada! Token de convite gerado com sucesso.')
+      const result = await aprovarMutation.mutateAsync(intencao.id)
+      const completeRegisterUrl = `${window.location.origin}/complete-register?token=${result.tokenConvite}`
+      alert(`Cadastro aprovado com sucesso! Foi enviado um e-mail para ${intencao.email} com o link:\n\n${completeRegisterUrl}`)
       router.push('/intencoes')
     } catch (error) {
       console.error('Erro ao aprovar intenção:', error)
+      alert('Erro ao aprovar intenção. Tente novamente.')
     }
   }
 
