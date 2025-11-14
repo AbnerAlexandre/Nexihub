@@ -51,3 +51,7 @@ export async function updateIntencao(id: string, data: IntencaoUpdate): Promise<
 export async function aprovarIntencao(id: string): Promise<Intencao> {
   return await post<Intencao>(`/intencoes/${id}/aprovar`, {})
 }
+
+export async function getIntencaoByToken(token: string): Promise<Intencao> {
+  return await get<Intencao>(`/intencoes/token/${token}`)
+}

@@ -63,3 +63,15 @@ export function useAprovarIntencao() {
     },
   })
 }
+
+export function useIntencaoByToken(token: string) {
+  return useQuery({
+    queryKey: ['intencao', 'token', token],
+    queryFn: async () => {
+      const { getIntencaoByToken } = await import('../services/intencoes-service')
+      return getIntencaoByToken(token)
+    },
+    enabled: !!token,
+    staleTime: 1000 * 60 * 5,
+  })
+}

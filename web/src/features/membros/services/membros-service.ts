@@ -27,6 +27,14 @@ export type Membro = {
   experiencias: string
 }
 
+export type MembroCreate = {
+  nome: string
+  email: string
+  celular: string
+  senhaHash: string
+  ramo: string
+  descricao: string
+}
 
 export async function getMembros(): Promise<MembroEssencial[]> {
   // TODO: Implementar lógica
@@ -38,8 +46,9 @@ export function getMembro(id: string) {
   // TODO: Implementar lógica
 }
 
-export function createMembro(data: unknown) {
-  // TODO: Implementar lógica
+export async function createMembro(data: MembroCreate): Promise<Membro> {
+  const { post } = await import('@/lib/api')
+  return await post<Membro>('/membros', data)
 }
 
 export function updateMembro(id: string, data: unknown) {

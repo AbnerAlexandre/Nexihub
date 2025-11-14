@@ -1,4 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useRouter } from 'next/navigation'
 import { getMembros } from "../services/membros-service";
 
 export function useMembros() {
@@ -14,7 +15,22 @@ export function useMembro(id: string) {
 }
 
 export function useCreateMembro() {
-  // TODO: Implementar lógica
+  const router = useRouter()
+
+  return useMutation({
+    mutationFn: async (data: any) => {
+      const { createMembro } = await import('../services/membros-service')
+      return createMembro(data)
+    },
+    onSuccess: () => {
+      alert('Cadastro concluído com sucesso!')
+      router.push('/login')
+    },
+    onError: (error: any) => {
+      console.error('Erro ao criar membro:', error)
+      alert('Erro ao concluir cadastro. Tente novamente.')
+    },
+  })
 }
 
 export function useUpdateMembro() {
