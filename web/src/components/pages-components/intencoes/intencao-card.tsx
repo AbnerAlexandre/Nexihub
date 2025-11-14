@@ -1,5 +1,6 @@
 import type { IntencaoEssencial } from '@/features/intencao/services/intencoes-service'
 import { useRouter } from 'next/navigation'
+import { Badge } from '@/components/common'
 
 interface IntencaoCardProps {
   intencao: IntencaoEssencial
@@ -7,12 +8,6 @@ interface IntencaoCardProps {
 
 export function IntencaoCard({ intencao }: IntencaoCardProps) {
   const router = useRouter()
-
-  const statusColors = {
-    pendente: 'bg-yellow-500/20 text-yellow-500',
-    aprovado: 'bg-green-500/20 text-green-500',
-    recusado: 'bg-red-500/20 text-red-500',
-  }
 
   const statusLabels = {
     pendente: 'Pendente',
@@ -27,9 +22,9 @@ export function IntencaoCard({ intencao }: IntencaoCardProps) {
     >
       <div className="flex items-start justify-between mb-2">
         <h3 className="text-lg font-semibold">{intencao.nome}</h3>
-        <span className={`text-xs px-2 py-1 rounded ${statusColors[intencao.status]}`}>
+        <Badge variant={intencao.status}>
           {statusLabels[intencao.status]}
-        </span>
+        </Badge>
       </div>
       
       <p className="text-sm text-muted-foreground mb-1">{intencao.email}</p>

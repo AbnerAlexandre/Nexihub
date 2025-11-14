@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useIntencao, useUpdateIntencao, useAprovarIntencao } from '@/features/intencao/hooks/use-intencoes'
-import { PageTitle, AdminRoute } from '@/components/common'
+import { PageTitle, AdminRoute, Badge } from '@/components/common'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect } from 'react'
 import type { IntencaoStatus } from '@/features/intencao/services/intencoes-service'
@@ -147,21 +147,13 @@ export default function EditIntencaoPage() {
             <div>
               <label className="text-sm text-muted-foreground">Status Atual</label>
               <p className="text-lg">
-                <span
-                  className={`inline-block px-3 py-1 rounded text-sm ${
-                    intencao.status === 'pendente'
-                      ? 'bg-yellow-500/20 text-yellow-500'
-                      : intencao.status === 'aprovado'
-                      ? 'bg-green-500/20 text-green-500'
-                      : 'bg-red-500/20 text-red-500'
-                  }`}
-                >
+                <Badge variant={intencao.status} className="text-sm px-3">
                   {intencao.status === 'pendente'
                     ? 'Pendente'
                     : intencao.status === 'aprovado'
                     ? 'Aprovado'
                     : 'Recusado'}
-                </span>
+                </Badge>
               </p>
             </div>
             {intencao.tokenConvite && (

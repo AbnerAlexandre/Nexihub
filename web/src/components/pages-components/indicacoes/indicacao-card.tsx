@@ -1,5 +1,6 @@
 import type { IndicacaoEssencial } from '@/features/indicacoes/services/indicacoes-service'
 import { useRouter } from 'next/navigation'
+import { Badge } from '@/components/common'
 
 interface IndicacaoCardProps {
   indicacao: IndicacaoEssencial
@@ -7,13 +8,6 @@ interface IndicacaoCardProps {
 
 export function IndicacaoCard({ indicacao }: IndicacaoCardProps) {
   const router = useRouter()
-
-  const statusColors = {
-    pendente: 'bg-yellow-500/20 text-yellow-500',
-    em_prospeccao: 'bg-blue-500/20 text-blue-500',
-    fechado: 'bg-green-500/20 text-green-500',
-    perdido: 'bg-red-500/20 text-red-500',
-  }
 
   const statusLabels = {
     pendente: 'Pendente',
@@ -29,9 +23,9 @@ export function IndicacaoCard({ indicacao }: IndicacaoCardProps) {
     >
       <div className="flex items-start justify-between mb-2">
         <h3 className="text-lg font-semibold">{indicacao.nomeCliente}</h3>
-        <span className={`text-xs px-2 py-1 rounded ${statusColors[indicacao.status]}`}>
+        <Badge variant={indicacao.status}>
           {statusLabels[indicacao.status]}
-        </span>
+        </Badge>
       </div>
       
       <p className="text-sm text-muted-foreground mb-3">{indicacao.emailCliente}</p>
