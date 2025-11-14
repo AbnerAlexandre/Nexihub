@@ -21,6 +21,11 @@ export const selectIndicacaoEssencialSchema = selectIndicacaoSchema.pick({
   nomeRecebeu: z.string().nullable(),
 })
 
+export const updateIndicacaoSchema = z.object({
+  status: z.enum(['pendente', 'em_prospeccao', 'fechado', 'perdido']),
+})
+
 export type Indicacao = typeof indicacoes.$inferSelect
 export type InsertIndicacao = z.infer<typeof insertIndicacaoSchema>
 export type IndicacaoEssencial = z.infer<typeof selectIndicacaoEssencialSchema>
+export type UpdateIndicacao = z.infer<typeof updateIndicacaoSchema>

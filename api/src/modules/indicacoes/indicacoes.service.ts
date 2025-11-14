@@ -50,7 +50,17 @@ export class IndicacoesService {
   }
 
   async update(id: string, data: Partial<InsertIndicacao>) {
-    const indicacao = await this.repository.update(id, data)
+    // Remove campos undefined do objeto
+    const cleanData = Object.fromEntries(
+      Object.entries(data).filter(([_, value]) => value !== undefined)
+    ) as Partial<InsertIndicacao>
+    
+    // Se o status for fechado ou perdido, adiciona a data de fechamento
+    if (cleanData.status === 'fechado' || cleanData.status === 'perdido') {
+      cleanData.dataFechamento = new Date()
+    }
+    
+    const indicacao = await this.repository.update(id, cleanData)
     if (!indicacao) {
       throw new Error('Indicação não encontrada')
     }

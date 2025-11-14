@@ -1,11 +1,12 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 import { IndicacoesController } from './indicacoes.controller'
-import { insertIndicacaoSchema, selectIndicacaoSchema, selectIndicacaoEssencialSchema } from '@/db/schema'
+import { insertIndicacaoSchema, selectIndicacaoSchema, selectIndicacaoEssencialSchema, updateIndicacaoSchema } from '@/db/schema'
 
 export const indicacoesRoutes: FastifyPluginAsyncZod = async (app) => {
   const controller = new IndicacoesController()
 
+  // Rotas de listagem geral
   app.get(
     '/',
     {
@@ -20,37 +21,41 @@ export const indicacoesRoutes: FastifyPluginAsyncZod = async (app) => {
     controller.getAll.bind(controller)
   )
 
-  app.get(
+  // Rotas de criação e atualização (antes das rotas GET com parâmetros)
+  app.post(
+    '/',
+    {
+      schema: {
+        tags: ['Indicações'],
+        description: 'Cria uma nova indicação',
+        body: insertIndicacaoSchema,
+        response: {
+          201: selectIndicacaoSchema,
+        },
+      },
+    },
+    controller.create.bind(controller)
+  )
+
+  app.patch(
     '/:id',
     {
       schema: {
         tags: ['Indicações'],
-        description: 'Busca uma indicação por ID',
+        description: 'Atualiza uma indicação (status e data de fechamento)',
         params: z.object({
           id: z.string().uuid(),
         }),
+        body: updateIndicacaoSchema,
         response: {
           200: selectIndicacaoSchema,
         },
       },
     },
-    controller.getById.bind(controller)
+    controller.update.bind(controller)
   )
 
-  app.get(
-    '/:id/relations',
-    {
-      schema: {
-        tags: ['Indicações'],
-        description: 'Busca uma indicação com todas as relações',
-        params: z.object({
-          id: z.string().uuid(),
-        }),
-      },
-    },
-    controller.getWithRelations.bind(controller)
-  )
-
+  // Rotas GET específicas com prefixos literais
   app.get(
     '/indicador/:membroId',
     {
@@ -102,37 +107,36 @@ export const indicacoesRoutes: FastifyPluginAsyncZod = async (app) => {
     controller.getByStatus.bind(controller)
   )
 
-  app.post(
-    '/',
+  app.get(
+    '/:id/relations',
     {
       schema: {
         tags: ['Indicações'],
-        description: 'Cria uma nova indicação',
-        body: insertIndicacaoSchema,
-        response: {
-          201: selectIndicacaoSchema,
-        },
+        description: 'Busca uma indicação com todas as relações',
+        params: z.object({
+          id: z.string().uuid(),
+        }),
       },
     },
-    controller.create.bind(controller)
+    controller.getWithRelations.bind(controller)
   )
 
-  app.patch(
+  // Rota GET por ID (deve vir por último, após todas as rotas com prefixos literais)
+  app.get(
     '/:id',
     {
       schema: {
         tags: ['Indicações'],
-        description: 'Atualiza uma indicação',
+        description: 'Busca uma indicação por ID',
         params: z.object({
           id: z.string().uuid(),
         }),
-        body: insertIndicacaoSchema.partial(),
         response: {
           200: selectIndicacaoSchema,
         },
       },
     },
-    controller.update.bind(controller)
+    controller.getById.bind(controller)
   )
 }
 
