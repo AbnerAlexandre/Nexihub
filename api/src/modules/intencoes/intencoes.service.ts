@@ -60,13 +60,33 @@ export class IntencoesService {
     tokenExpiraEm.setDate(tokenExpiraEm.getDate() + 7)
 
     return await this.repository.update(id, {
+      status: 'aprovado',
       tokenConvite,
       tokenExpiraEm,
     } as any)
   }
 
-  async update(id: string, data: Partial<InsertIntencaoParticipacao>) {
-    const intencao = await this.repository.update(id, data)
+  async update(id: string, data: { status: 'pendente' | 'aprovado' | 'recusado' }) {
+    // Se o status for 'aprovado', gera o token automaticamente
+    if (data.status === 'aprovado') {
+      const tokenConvite = randomBytes(32).toString('hex')
+      const tokenExpiraEm = new Date()
+      tokenExpiraEm.setDate(tokenExpiraEm.getDate() + 7)
+
+      const intencao = await this.repository.update(id, {
+        status: data.status,
+        tokenConvite,
+        tokenExpiraEm,
+      } as any)
+      
+      if (!intencao) {
+        throw new Error('Intenção não encontrada')
+      }
+      return intencao
+    }
+
+    // Para outros status, apenas atualiza o status
+    const intencao = await this.repository.update(id, { status: data.status } as any)
     if (!intencao) {
       throw new Error('Intenção não encontrada')
     }

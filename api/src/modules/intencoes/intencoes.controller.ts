@@ -52,7 +52,7 @@ export class IntencoesController {
     }
   }
 
-  async update(request: FastifyRequest<{ Params: { id: string }; Body: Partial<InsertIntencaoParticipacao> }>, reply: FastifyReply) {
+  async update(request: FastifyRequest<{ Params: { id: string }; Body: { status: 'pendente' | 'aprovado' | 'recusado' } }>, reply: FastifyReply) {
     try {
       const intencao = await this.service.update(request.params.id, request.body)
       return reply.status(200).send(intencao)

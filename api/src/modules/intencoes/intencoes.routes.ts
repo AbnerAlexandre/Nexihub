@@ -108,11 +108,13 @@ export const intencoesRoutes: FastifyPluginAsyncZod = async (app) => {
     {
       schema: {
         tags: ['Intenções'],
-        description: 'Atualiza uma intenção',
+        description: 'Atualiza o status de uma intenção (gera token automaticamente se aprovado)',
         params: z.object({
           id: z.string().uuid(),
         }),
-        body: insertIntencaoParticipacaoSchema.partial(),
+        body: z.object({
+          status: z.enum(['pendente', 'aprovado', 'recusado']),
+        }),
         response: {
           200: selectIntencaoParticipacaoSchema,
         },
