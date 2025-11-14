@@ -11,7 +11,12 @@ type ActiveLinkProps = {
 
 export function ActiveLink({ children, href, ...props }: ActiveLinkProps) {
     const pathname = usePathname();
-    const isCurrentPath = pathname === href || pathname === props.as || pathname.startsWith(String(href));
+    
+    // Para a home ("/"), verifica se o pathname é exatamente "/"
+    // Para outras rotas, verifica se começa com o href (exceto para "/")
+    const isCurrentPath = href === '/' 
+        ? pathname === '/' 
+        : pathname === href || pathname === props.as || pathname.startsWith(String(href) + '/');
     
     return (
         <Link
